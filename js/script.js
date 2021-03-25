@@ -1,3 +1,25 @@
+function makeGETRequest(url) {
+	return new Promise((resolve, reject) => {
+		let xhr;
+		if (window.XMLHttpRequest) {
+			xhr = new XMLHttpRequest();
+		} else if (window.ActiveXObject) {
+			xhr = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+
+		xhr.onreadystatechange = () => {
+			if (xhr.readyState === 4 && xhr.status === 200) {
+				resolve(xhr.responseText);
+			}
+		}
+
+		xhr.open('GET', url, true);
+		xhr.send();
+	})
+}
+
+const API_URL = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
+
 class GoodsItem {
 	constructor(title, price) {
 		this.title = title;
@@ -5,7 +27,7 @@ class GoodsItem {
 	}
 
 	render() {
-		return `<div class="goods-item"><h3>${this.title}</h3><p>${this.price}</p></div>`;
+		return `<div class="goods-item"><h3>${this.product_name}</h3><p>${this.price}</p></div>`;
 	}
 }
 
@@ -15,18 +37,20 @@ class GoodsList {
 	}
 
 	fetchGoods() {
-		this.goods = [
-			{ title: 'Shirt', price: 150 },
-			{ title: 'Socks', price: 50 },
-			{ title: 'Jacket', price: 350 },
-			{ title: 'Shoes', price: 250 },
-		];
+		return new Promise(resolve => {
+			makeGETRequest(`${API_URL}/catalogData.json`).then(
+				productsArr => {
+					this.goods = JSON.parse(productsArr);
+				});
+			resolve(this);
+		})
 	}
+
 
 	render() {
 		let listHtml = '';
 		this.goods.forEach(good => {
-			const goodItem = new GoodsItem(good.title, good.price);
+			const goodItem = new GoodsItem(good.product_name, good.price);
 			listHtml += goodItem.render();
 		});
 		document.querySelector('.goods-list').innerHTML = listHtml;
@@ -40,17 +64,27 @@ class GoodsList {
 }
 
 const list = new GoodsList();
-list.fetchGoods();
-list.render();
+
+list.fetchGoods().then(result => result.render());
 
 
 class Basket {
-	addProduct() { };
-	removeProduct() { };
-	totalPrice() { };
+	constructor() {
+		this.items = [];
+	}
+	addItem(basketItem) {
+		this.items.push(basketItem);
+	};
+	deleteItem(id) {
+		this.items.splice(this.items.indexOf(this.items.id), 1);
+	}
 }
 
 class BasketItem {
+	constructor(good) {
+		this.good = good;
+	}
+
 
 }
 
@@ -109,3 +143,5 @@ hamburger.addTopping();
 hamburger.addMayoneze();
 hamburger.removeTopping();
 console.log(`Цена: ${hamburger.totalPrice()}, Калорийность: ${hamburger.totalCalories()}`);
+
+
