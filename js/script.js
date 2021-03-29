@@ -34,6 +34,7 @@ class GoodsItem {
 class GoodsList {
 	constructor() {
 		this.goods = [];
+		this.filteredGoods = [];
 	}
 
 	fetchGoods() {
@@ -41,6 +42,7 @@ class GoodsList {
 			makeGETRequest(`${API_URL}/catalogData.json`).then(
 				productsArr => {
 					this.goods = JSON.parse(productsArr);
+					this.filteredGoods = JSON.parse(goods)
 				});
 			resolve(this);
 		})
@@ -49,7 +51,7 @@ class GoodsList {
 
 	render() {
 		let listHtml = '';
-		this.goods.forEach(good => {
+		this.filteredGoods.forEach(good => {
 			const goodItem = new GoodsItem(good.product_name, good.price);
 			listHtml += goodItem.render();
 		});
@@ -61,6 +63,13 @@ class GoodsList {
 		this.goods.forEach(p => sum += p.price);
 		return sum;
 	}
+
+	filterGoods(value) {
+		const regexp = new RegExp(value, 'i');
+		this.filteredGoods = this.goods.filter(good => regexp.test(good.product_name));
+		this.render();
+	}
+
 }
 
 const list = new GoodsList();
@@ -144,4 +153,14 @@ hamburger.addMayoneze();
 hamburger.removeTopping();
 console.log(`Цена: ${hamburger.totalPrice()}, Калорийность: ${hamburger.totalCalories()}`);
 
+searchButton.addEventListener('click', (e) => {
+	const value = searchInput.value;
+	list.filterGoods(value);
+});
 
+
+//ДЗ №4
+let text = "Lorem 'ipsum' dolor sit amet consectetur adipisicing e'lit. 'Assumendan'eque laboriosam libero numquam'. Enim hic rem pariatur 'nobis' necessitatibus neque perferendis 'fugit ducimus' vel cum illum ratione 'numquam' m'inus qui cumque, fugiat dolorum 'cupid'itate', amet quas consectetur eos tempora 'repudiandae' molestias. Quibusdam est minima voluptate perferendis itaque maiores hic, debitis accusantium harum aut modi necessitatibus, placeat veniam asperiores consequatur ut? Neque maiores 'sint' tempora iusto laborum voluptatem, 'repellendu's quas non inventore id dolore ullam recusandae esse adipisci. Architecto sed illo commodi qui 'facere' quidem perspiciat'is 'tempora sint dolor eum non tempore' quod magni veritatis quos, 'dignissimos animi cum' suscipit assumenda.";
+
+const regexp = /(\s)'(.*?)'(\s|\.|,)/gi;
+console.log(text.replace(regexp, '$1"$2"$3'));
