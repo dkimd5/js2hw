@@ -1,30 +1,3 @@
-class GoodsItem {
-	constructor(title, price) {
-		this.product_name = title;
-		this.price = price;
-	}
-}
-
-class GoodsList {
-	constructor() {
-		this.goods = [];
-		this.filteredGoods = [];
-	}
-
-	filterGoods(value) {
-		const regexp = new RegExp(value, 'i');
-		this.filteredGoods = this.goods.filter(good => regexp.test(good.product_name));
-		this.render();
-	}
-
-}
-
-
-document.querySelector('.search-button').addEventListener('click', (e) => {
-	const value = searchInput.value;
-	list.filterGoods(value);
-});
-
 const API_URL = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
 
 const app = new Vue({
@@ -32,7 +5,9 @@ const app = new Vue({
 	data: {
 		goods: [],
 		filteredGoods: [],
-		searchLine: ''
+		searchLine: '',
+		cart: [],
+		isVisibleCart: false,
 	},
 
 	methods: {
@@ -43,6 +18,17 @@ const app = new Vue({
 					this.filteredGoods = response;
 					this.goods = response;
 				})
+		},
+
+		filterGoods(good_name) {
+			const regexp = new RegExp(good_name, 'i');
+			this.filteredGoods = this.goods.filter(good => regexp.test(good.product_name));
+		},
+
+		cartShown() {
+			if (this.cart.length() > 0) {
+				this.isVisibleCart = true;
+			}
 		}
 
 	},

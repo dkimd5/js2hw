@@ -11,10 +11,12 @@
 
 <body>
 	<div id="app">
-		<header>
-			<input type="text" class="goods-search" />
-			<button class="search-button" type="button">Искать</button>
-			<button class="cart-button" type="button">Корзина</button>
+		<header class="header">
+			<div class="search-wrap">
+				<input type="text" v-model="searchLine" class="goods-search" />
+				<button class="search-button" type="button" v-on:click="filterGoods(searchLine)">Искать</button>
+			</div>
+			<button class="cart-button" type="button" v-show="isVisibleCart">Корзина</button>
 		</header>
 		<main>
 			<div class="goods-list">
