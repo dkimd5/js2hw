@@ -12,20 +12,17 @@
 <body>
 	<div id="app">
 		<header class="header">
-			<div class="search-wrap">
-				<input type="text" v-model="searchLine" class="goods-search" />
-				<button class="search-button" type="button" v-on:click="filterGoods(searchLine)">Искать</button>
-			</div>
-			<button class="cart-button" type="button" v-show="isVisibleCart">Корзина</button>
+			<search-goods></search-goods>
+			<cart-goods></cart-goods>
 		</header>
 		<main>
-			<div class="goods-list">
-				<div class="goods-item" v-for="good in filteredGoods">
-					<h3>{{ good.product_name }}</h3>
-					<p>{{ good.price }}</p>
-				</div>
-			</div>
-
+			<goods-list :goods="filteredGoods"></goods-list>
+			<h2>Todos:</h2>
+			<ol>
+				<li v-for="todo1 in todos">
+					<todo-list-item :todo="todo1" />
+				</li>
+			</ol>
 		</main>
 	</div>
 
