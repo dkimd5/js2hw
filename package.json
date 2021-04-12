@@ -1,0 +1,23 @@
+{
+  "name": "vue-gb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dkimd5/js2hw.git"
+  },
+  "author": "dkimd5",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dkimd5/js2hw/issues"
+  },
+  "homepage": "https://github.com/dkimd5/js2hw#readme",
+  "devDependencies": {
+    "webpack": "^5.31.2",
+    "webpack-cli": "^4.6.0"
+  }
+}
